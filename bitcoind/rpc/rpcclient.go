@@ -1,5 +1,5 @@
 // Package bitcoind is a package
-package bitcoind
+package rpc
 
 /*
  * The MIT License (MIT)

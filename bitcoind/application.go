@@ -27,12 +27,14 @@ import (
     "github.com/rvelhote/bitcoind-status/configuration"
     "html/template"
     "log"
+    "github.com/rvelhote/bitcoind-status/bitcoind/rpc/method"
+    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
 type IndexTemplateParams struct {
     Title         string
-    Peers     []PeerInfo
+    Peers     []method.PeerInfo
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -51,8 +53,8 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
         t, _ = template.New("index.html").ParseFiles("../templates/index.html")
     }
 
-    client := NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
-    peerinfo, err := GetPeerInfo(client)
+    client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
+    peerinfo, err := method.GetPeerInfo(client)
 
     if err != nil {
         log.Fatal(err)
@@ -67,8 +69,6 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 }
 
 func Init(mux *http.ServeMux, configuration configuration.Configuration) {
-
-
     indexHandler := IndexRequestHandler{Configuration: configuration}
 
     mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))

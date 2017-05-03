@@ -1,5 +1,5 @@
 // Package bitcoind is a package
-package bitcoind
+package method
 
 /*
  * The MIT License (MIT)
@@ -25,6 +25,7 @@ package bitcoind
 import (
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/timestamp-marshal"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 )
 
 type PeerInfoArgs struct {
@@ -78,7 +79,7 @@ type PeerInfoBytesReceived struct {
 	Version uint `json:"version"`
 }
 
-func GetPeerInfo(client *RPCClient) ([]PeerInfo, error) {
+func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 	response, err := client.Post("getpeerinfo", PeerInfoArgs{})
 
 	if err != nil {
