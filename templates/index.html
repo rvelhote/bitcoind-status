@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>{{.Title}}</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="http://bootswatch.com/lumen/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        xxx
+    </div>
+</nav>
+
+<main class="container">
+
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Addr</th>
+                <th>Services</th>
+                <th>RelayTxes</th>
+                <th>LastSend</th>
+                <th>LastRecv</th>
+                <th>BytesSent</th>
+                <th>BytesRecv</th>
+                <th>ConnTime</th>
+                <th>TimeOffset</th>
+                <th>PingTime</th>
+                <th>MinPing</th>
+                <th>Version</th>
+                <th>Subver</th>
+                <th>Inbout</th>
+                <th>AddNode</th>
+                <th>StartHeight</th>
+                <th>BanScore</th>
+                <th>SynchedHeaders</th>
+                <th>SynchedBlocks</th>
+                <th>Whitelisted</th>
+                <th>BytesReceived</th>
+                <th>BytesSend</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range $key, $value := .Peers }}
+                <tr>
+                    <td>{{ $value.Addr }}</td>
+                    <td>{{ $value.Services }}</td>
+                    <td>{{ $value.RelayTxes }}</td>
+                    <td>{{ $value.LastSend }}</td>
+                    <td>{{ $value.LastRecv }}</td>
+                    <td>{{ $value.BytesSent }}</td>
+                    <td>{{ $value.BytesRecv }}</td>
+                    <td>{{ $value.ConnTime }}</td>
+                    <td>{{ $value.TimeOffset }}</td>
+                    <td>{{ $value.PingTime }}</td>
+                    <td>{{ $value.MinPing }}</td>
+                    <td>{{ $value.Version }}</td>
+                    <td>{{ $value.Subver }}</td>
+                    <td>{{ $value.Inbout }}</td>
+                    <td>{{ $value.AddNode }}</td>
+                    <td>{{ $value.StartHeight }}</td>
+                    <td>{{ $value.BanScore }}</td>
+                    <td>{{ $value.SynchedHeaders }}</td>
+                    <td>{{ $value.SynchedBlocks }}</td>
+                    <td>{{ $value.Whitelisted }}</td>
+                    <td>{{ $value.BytesReceived }}</td>
+                    <td>{{ $value.BytesSend }}</td>
+                </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

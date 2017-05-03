@@ -26,19 +26,15 @@ import (
 	"github.com/rvelhote/bitcoind-status/bitcoind"
 	"github.com/rvelhote/bitcoind-status/configuration"
 	"log"
+	"net/http"
 )
 
 func main() {
 	conf, _ := configuration.LoadConfiguration("conf/configuration.json")
 
-	client := bitcoind.NewRPCClient(conf.Url, conf.Username, conf.Password)
-	peerinfo, err := bitcoind.GetPeerInfo(client)
+	mux := http.NewServeMux()
+	bitcoind.Init(mux, conf)
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, peer := range peerinfo {
-		log.Println(peer.Addr)
-	}
+	log.Println("Ready to serve requests!")
+	http.ListenAndServe(":8080", mux)
 }
