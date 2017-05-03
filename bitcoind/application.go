@@ -23,54 +23,57 @@ package bitcoind
  * SOFTWARE.
  */
 import (
-    "net/http"
-    "github.com/rvelhote/bitcoind-status/configuration"
-    "html/template"
-    "log"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc/method"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+ 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc/method"
+	"github.com/rvelhote/bitcoind-status/configuration"
+	"html/template"
+	"log"
+	"net/http"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
 type IndexTemplateParams struct {
-    Title         string
-    Peers     []method.PeerInfo
+	Title   string
+	Peers   []method.PeerInfo
+	Network method.NetworkInfo
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
 type IndexRequestHandler struct {
-    // Configuration contains the app configuration. In this context only the server list is used.
-    Configuration configuration.Configuration
+	// Configuration contains the app configuration. In this context only the server list is used.
+	Configuration configuration.Configuration
 }
 
 // ServeHTTP handles the request made to the homepage of the app. It will only serve the required files to start
 // the RectJS app as well as some important configuration.
 func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-    w.Header().Add("Content-Type", "text/html")
-    t, err := template.New("index.html").ParseFiles("templates/index.html")
+	w.Header().Add("Content-Type", "text/html")
+	t, err := template.New("index.html").ParseFiles("templates/index.html")
 
-    if err != nil {
-        t, _ = template.New("index.html").ParseFiles("../templates/index.html")
-    }
+	if err != nil {
+		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
+	}
 
-    client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
-    peerinfo, err := method.GetPeerInfo(client)
+	client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
+	peerinfo, err := method.GetPeerInfo(client)
+	networkinfo, err := method.GetNetworkInfo(client)
 
-    if err != nil {
-        log.Fatal(err)
-    }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    params := IndexTemplateParams{
-        Title:         "Bitcoin Daemon Status",
-        Peers: peerinfo,
-    }
+	params := IndexTemplateParams{
+		Title:   "Bitcoin Daemon Status",
+		Peers:   peerinfo,
+		Network: networkinfo,
+	}
 
-    t.Execute(w, params)
+	t.Execute(w, params)
 }
 
 func Init(mux *http.ServeMux, configuration configuration.Configuration) {
-    indexHandler := IndexRequestHandler{Configuration: configuration}
+	indexHandler := IndexRequestHandler{Configuration: configuration}
 
-    mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-    mux.Handle("/", indexHandler)
+	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	mux.Handle("/", indexHandler)
 }
