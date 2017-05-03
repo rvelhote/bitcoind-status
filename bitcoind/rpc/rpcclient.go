@@ -1,4 +1,4 @@
-// Package bitcoind is a package
+// Package rpc is a package
 package rpc
 
 /*
@@ -45,8 +45,8 @@ func NewRPCClient(url, user string, password string) *RPCClient {
 	}
 }
 
-func (r *RPCClient) Post(method, args interface{}) (*http.Response, error) {
-	encoded, err := json2.EncodeClientRequest("getpeerinfo", args)
+func (r *RPCClient) Post(method string, args interface{}) (*http.Response, error) {
+	encoded, err := json2.EncodeClientRequest(method, args)
 
 	if err != nil {
 		return nil, err
