@@ -24,8 +24,8 @@ package method
  */
 import (
 	"github.com/gorilla/rpc/v2/json2"
-	"github.com/rvelhote/timestamp-marshal"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/rvelhote/timestamp-marshal"
 )
 
 type PeerInfoArgs struct {
