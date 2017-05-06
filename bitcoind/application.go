@@ -55,9 +55,13 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 
 	client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
-	peerinfo, err := method.GetPeerInfo(client)
-	networkinfo, err := method.GetNetworkInfo(client)
 
+	peerinfo, err := method.GetPeerInfo(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	networkinfo, err := method.GetNetworkInfo(client)
 	if err != nil {
 		log.Fatal(err)
 	}
