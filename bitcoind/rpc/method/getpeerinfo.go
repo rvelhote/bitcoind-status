@@ -41,7 +41,7 @@ type PeerInfo struct {
 	LastRecv       timestamp.Unix    `json:"lastrecv"`
 	BytesSent      int               `json:"bytessent"`
 	BytesRecv      int               `json:"bytesrecv"`
-	ConnTime       uint              `json:"conntime"`
+	ConnTime       timestamp.Unix    `json:"conntime"`
 	TimeOffset     int               `json:"timeoffset"`
 	PingTime       float32           `json:"pingtime"`
 	MinPing        float64           `json:"minping"`
