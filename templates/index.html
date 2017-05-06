@@ -9,40 +9,79 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="http://bootswatch.com/lumen/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <style type="text/css">
+        .logo { margin: 20px 0 35px 0; text-align: center; }
+        .key { font-size: 10.2px; }
+        .value { font-size: 14.4px; font-weight: bold; }
+        ul.list-unstyled li { margin-bottom: 15px; text-align: center; }
+        ul.list-unstyled li:last-child { margin-bottom: 0; }
+    </style>
 </head>
 <body>
 
 <header class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-        <div class="col-lg-1">
-            <div style="padding: 20px 0;">
-            <img title="Bitcoin" alt="Bitcoin Logo" src="/assets/images/bitcoin.svg" width="64" height="64"/>
+
+        <div class="col-lg-12">
+            <div class="logo">
+                <img src="/assets/images/bitcoin.svg" />
             </div>
         </div>
-        <div class="col-lg-11">
-            <div class="col-lg-6">
+
+        {{if .Network.Warnings}}
+            <div class="col-lg-12">
+                <div class="alert alert-warning">{{.Network.Warnings}}</div>
+            </div>
+        {{end}}
+
+        <div class="col-lg-12">
+            <div class="col-lg-3">
                 <ul class="list-unstyled" style="padding: 20px 0;">
                     <li>
-                        <div>{{.Network.Subversion}}</div>
-                        <div style="font-weight: bold;">USER AGENT</div>
+                        <div class="value">{{.Network.Subversion}}</div>
+                        <div class="key">USER AGENT</div>
                     </li>
                     <li>
-                        <div>{{.Network.Version}}</div>
-                        <div style="font-weight: bold;">PROTOCOL VERSION</div>
+                        <div class="value">{{.Network.ProtocolVersion}}</div>
+                        <div class="key">PROTOCOL VERSION</div>
                     </li>
                 </ul>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <ul class="list-unstyled" style="padding: 20px 0;">
                     <li>
-                        <div>Porto, Portugal</div>
-                        <div style="font-weight: bold;">LOCATION</div>
+                        <div class="value">{{.Network.Version}}</div>
+                        <div class="key">VERSION</div>
                     </li>
                     <li>
-                        <div>Europe/Lisbon</div>
-                        <div style="font-weight: bold;">TIMEZONE</div>
+                        <div class="value">{{.Network.Services}}</div>
+                        <div class="key">SERVICES</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <ul class="list-unstyled" style="padding: 20px 0;">
+                    <li>
+                        <div class="value">{{.Network.Connections}}</div>
+                        <div class="key">CONNECTIONS</div>
+                    </li>
+                    <li>
+                        <div class="value">{{.Network.RelayFee}}</div>
+                        <div class="key">RELAY FEE</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <ul class="list-unstyled" style="padding: 20px 0;">
+                    <li>
+                        <div class="value">Porto, Portugal</div>
+                        <div class="key">LOCATION</div>
+                    </li>
+                    <li>
+                        <div class="value">Europe/Lisbon</div>
+                        <div class="key">TIMEZONE</div>
                     </li>
                 </ul>
             </div>
@@ -50,7 +89,7 @@
     </div>
 </header>
 
-<main class="container-fluid" style="margin-top: 150px;">
+<main class="container-fluid" style="margin-top: 257px;">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -94,7 +133,6 @@
 </main>
 
 <footer>
-    <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 </footer>
 
 </body>
