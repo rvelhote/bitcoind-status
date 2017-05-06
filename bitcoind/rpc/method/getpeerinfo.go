@@ -51,7 +51,7 @@ type PeerInfo struct {
 	AddNode        bool              `json:"addnode"`
 	StartHeight    uint              `json:"startingheight"`
 	BanScore       uint              `json:"banscore"`
-	SynchedHeaders uint              `json:"synced_headers"`
+	SynchedHeaders int               `json:"synced_headers"`
 	SynchedBlocks  int               `json:"synced_blocks"`
 	Whitelisted    bool              `json:"whitelisted"`
 	BytesReceived  PeerInfoBytesSent `json:"bytessent_per_msg"`
