@@ -49,7 +49,7 @@ type PeerInfo struct {
 	Subver         string            `json:"subver"`
 	Inbout         bool              `json:"inbound"`
 	AddNode        bool              `json:"addnode"`
-	StartHeight    uint              `json:"startingheight"`
+	StartHeight    int               `json:"startingheight"`
 	BanScore       uint              `json:"banscore"`
 	SynchedHeaders int               `json:"synced_headers"`
 	SynchedBlocks  int               `json:"synced_blocks"`
