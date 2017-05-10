@@ -26,8 +26,8 @@ import (
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/timestamp-marshal"
-	"net"
 	"log"
+	"net"
 )
 
 type PeerInfoArgs struct {
@@ -117,7 +117,7 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 	}
 
 	for i, _ := range result {
-		result[i].hostname();
+		result[i].hostname()
 	}
 
 	return result, nil

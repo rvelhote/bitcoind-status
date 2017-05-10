@@ -11,21 +11,38 @@
 
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
     <style type="text/css">
-        .logo { margin: 20px 0 35px 0; text-align: center; }
-        .key { font-size: 10.2px; }
-        .value { font-size: 14.4px; font-weight: bold; }
-        ul.list-unstyled li { margin-bottom: 15px; text-align: center; }
-        ul.list-unstyled li:last-child { margin-bottom: 0; }
+        .logo {
+            margin: 20px 0 35px 0;
+            text-align: center;
+        }
+
+        .key {
+            font-size: 10.2px;
+        }
+
+        .value {
+            font-size: 14.4px;
+            font-weight: bold;
+        }
+
+        ul.list-unstyled li {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        ul.list-unstyled li:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
 
-<header class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+<header class="navbar navbar-default">
+    <div class="container-fluid">
         {{if .Network.Warnings}}
-            <div class="col-lg-12">
-                <div class="alert alert-warning">{{.Network.Warnings}}</div>
-            </div>
+        <div class="col-lg-12">
+            <div class="alert alert-warning">{{.Network.Warnings}}</div>
+        </div>
         {{end}}
 
         <div class="col-lg-12">
@@ -61,20 +78,20 @@
                         <div class="key">CONNECTIONS</div>
                     </li>
                     <li>
-                        <div class="value">{{.Network.RelayFee}}</div>
-                        <div class="key">RELAY FEE</div>
+                        <div class="value">--</div>
+                        <div class="key">--</div>
                     </li>
                 </ul>
             </div>
             <div class="col-lg-2">
                 <ul class="list-unstyled" style="padding: 20px 0;">
                     <li>
-                        <div class="value">Porto, Portugal</div>
-                        <div class="key">LOCATION</div>
+                        <div class="value">--</div>
+                        <div class="key">--</div>
                     </li>
                     <li>
-                        <div class="value">Europe/Lisbon</div>
-                        <div class="key">TIMEZONE</div>
+                        <div class="value">--</div>
+                        <div class="key">--</div>
                     </li>
                 </ul>
             </div>
@@ -82,50 +99,77 @@
     </div>
 </header>
 
-<main class="container-fluid" style="margin-top: 257px;">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Addr</th>
-                <th>Services</th>
-                <th>RelayTxes</th>
-                <th>BytesSent</th>
-                <th>BytesRecv</th>
-                <th>ConnTime</th>
-                <th>TimeOffset</th>
-                <th>PingTime</th>
-                <th>MinPing</th>
-                <th>Version</th>
-                <th>Subver</th>
-                <th>StartHeight</th>
-                <th>SynchedHeaders</th>
-                <th>SynchedBlocks</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{ range $key, $value := .Peers }}
-                <tr>
-                    <td>
-                        <div>{{ $value.Addr }}</div>
-                        <div>{{ $value.Hostname }}</div>
-                    </td>
-                    <td>{{ $value.Services }}</td>
-                    <td>{{ $value.RelayTxes }}</td>
-                    <td>{{ $value.BytesSent }}</td>
-                    <td>{{ $value.BytesRecv }}</td>
-                    <td>{{ $value.ConnTime }}</td>
-                    <td>{{ $value.TimeOffset }}</td>
-                    <td>{{ $value.PingTime }}</td>
-                    <td>{{ $value.MinPing }}</td>
-                    <td>{{ $value.Version }}</td>
-                    <td>{{ $value.Subver }}</td>
-                    <td>{{ $value.StartHeight }}</td>
-                    <td>{{ $value.SynchedHeaders }}</td>
-                    <td>{{ $value.SynchedBlocks }}</td>
-                </tr>
-            {{ end }}
-        </tbody>
-    </table>
+<main class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Peers</div>
+                <div class="panel-body">
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Addr</th>
+                            <th>Services</th>
+                            <th>BytesSent</th>
+                            <th>BytesRecv</th>
+                            <th>ConnTime</th>
+                            <th>TimeOffset</th>
+                            <th>PingTime</th>
+                            <th>Subver</th>
+                            <th>SynchedBlocks</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range $key, $value := .Peers }}
+                        <tr>
+                            <td>
+                                <div>{{ $value.Addr }}</div>
+                                <div>{{ $value.Hostname }}</div>
+                            </td>
+                            <td>{{ $value.Services }}</td>
+                            <td>{{ $value.BytesSent }}</td>
+                            <td>{{ $value.BytesRecv }}</td>
+                            <td>{{ $value.ConnTime }}</td>
+                            <td>{{ $value.TimeOffset }}</td>
+                            <td>{{ $value.PingTime }}</td>
+                            <td>{{ $value.Subver }}</td>
+                            <td>{{ $value.SynchedBlocks }}</td>
+                        </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Banned</div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Address</th>
+                            <th>Until</th>
+                            <th>Created</th>
+                            <th>Reason</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range $key, $value := .Banned }}
+                            <tr>
+                                <td>{{ $value.Address }}</td>
+                                <td>{{ $value.BannedUntil }}</td>
+                                <td>{{ $value.BanCreated }}</td>
+                                <td>{{ $value.BanReason }}</td>
+                            </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer>

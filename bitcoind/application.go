@@ -23,7 +23,7 @@ package bitcoind
  * SOFTWARE.
  */
 import (
- 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc/method"
 	"github.com/rvelhote/bitcoind-status/configuration"
 	"html/template"
@@ -36,6 +36,7 @@ type IndexTemplateParams struct {
 	Title   string
 	Peers   []method.PeerInfo
 	Network method.NetworkInfo
+	Banned  []method.Banned
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -66,10 +67,16 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		log.Fatal(err)
 	}
 
+	banned, err := method.ListBanned(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	params := IndexTemplateParams{
 		Title:   "Bitcoin Daemon Status",
 		Peers:   peerinfo,
 		Network: networkinfo,
+		Banned:  banned,
 	}
 
 	t.Execute(w, params)
