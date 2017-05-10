@@ -125,12 +125,12 @@
                         <tr>
                             <td>
                                 <div>{{ $value.Addr }}</div>
-                                <div>{{ $value.Hostname }}</div>
+                                <div>{{ $value.Humanize.Hostname }}</div>
                             </td>
                             <td>{{ $value.Services }}</td>
-                            <td>{{ $value.BytesSent }}</td>
-                            <td>{{ $value.BytesRecv }}</td>
-                            <td>{{ $value.ConnTime }}</td>
+                            <td>{{ $value.Humanize.BytesSent }}</td>
+                            <td>{{ $value.Humanize.BytesRecv }}</td>
+                            <td>{{ $value.Humanize.ConnTime }}</td>
                             <td>{{ $value.TimeOffset }}</td>
                             <td>{{ $value.PingTime }}</td>
                             <td>{{ $value.Subver }}</td>
@@ -158,9 +158,16 @@
                         <tbody>
                         {{ range $key, $value := .Banned }}
                             <tr>
-                                <td>{{ $value.Address }}</td>
-                                <td>{{ $value.BannedUntil }}</td>
-                                <td>{{ $value.BanCreated }}</td>
+                                <td>
+                                    <div>{{ $value.Address }}</div>
+                                    <div>{{ $value.Humanized.Address}}</div>
+                                </td>
+                                <td>
+                                    <time title="{{ $value.BannedUntil }}">{{ $value.Humanized.BannedUntil }}</time>
+                                </td>
+                                <td>
+                                    <time title="{{ $value.BanCreated }}">{{ $value.Humanized.BanCreated }}</time>
+                                </td>
                                 <td>{{ $value.BanReason }}</td>
                             </tr>
                         {{ end }}

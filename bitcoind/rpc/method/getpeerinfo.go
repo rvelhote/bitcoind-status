@@ -23,6 +23,7 @@ package method
  * SOFTWARE.
  */
 import (
+	"github.com/dustin/go-humanize"
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/timestamp-marshal"
@@ -41,8 +42,8 @@ type PeerInfo struct {
 	RelayTxes      bool              `json:"relaytxes"`
 	LastSend       timestamp.Unix    `json:"lastsend"`
 	LastRecv       timestamp.Unix    `json:"lastrecv"`
-	BytesSent      int               `json:"bytessent"`
-	BytesRecv      int               `json:"bytesrecv"`
+	BytesSent      uint64            `json:"bytessent"`
+	BytesRecv      uint64            `json:"bytesrecv"`
 	ConnTime       timestamp.Unix    `json:"conntime"`
 	TimeOffset     int               `json:"timeoffset"`
 	PingTime       float32           `json:"pingtime"`
@@ -58,7 +59,14 @@ type PeerInfo struct {
 	Whitelisted    bool              `json:"whitelisted"`
 	BytesReceived  PeerInfoBytesSent `json:"bytessent_per_msg"`
 	BytesSend      PeerInfoBytesSent `json:"bytesrecv_per_msg"`
-	Hostname       string
+	Humanize       PeerInfoHumanize
+}
+
+type PeerInfoHumanize struct {
+	Hostname  string
+	BytesSent string
+	BytesRecv string
+	ConnTime  string
 }
 
 type PeerInfoBytesSent struct {
@@ -83,21 +91,20 @@ type PeerInfoBytesReceived struct {
 }
 
 // hostname fetches the hostname associated to the peer's ip address and sets it automatically (just call the func).
-func (p *PeerInfo) hostname() error {
-	host, _, _ := net.SplitHostPort(p.Addr)
+func Hostname(ipaddress string) (string, error) {
+	host, _, _ := net.SplitHostPort(ipaddress)
 	names, err := net.LookupAddr(host)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if len(names) == 0 {
-		log.Println("Names not found for " + p.Addr)
-		return nil
+		log.Println("Names not found for " + ipaddress)
+		return "", nil
 	}
 
-	p.Hostname = names[0]
-	return nil
+	return names[0], nil
 }
 
 func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
@@ -116,8 +123,11 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 		return nil, err
 	}
 
-	for i, _ := range result {
-		result[i].hostname()
+	for i, peer := range result {
+		result[i].Humanize.Hostname, _ = Hostname(peer.Addr)
+		result[i].Humanize.BytesRecv = humanize.Bytes(peer.BytesRecv)
+		result[i].Humanize.BytesSent = humanize.Bytes(peer.BytesSent)
+		result[i].Humanize.ConnTime = humanize.Time(peer.ConnTime.Time)
 	}
 
 	return result, nil

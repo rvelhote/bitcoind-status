@@ -79,7 +79,10 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		Banned:  banned,
 	}
 
-	t.Execute(w, params)
+	err = t.Execute(w, params)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func Init(mux *http.ServeMux, configuration configuration.Configuration) {
