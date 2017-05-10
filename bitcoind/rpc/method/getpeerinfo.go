@@ -26,6 +26,8 @@ import (
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/timestamp-marshal"
+	"net"
+	"log"
 )
 
 type PeerInfoArgs struct {
@@ -56,6 +58,7 @@ type PeerInfo struct {
 	Whitelisted    bool              `json:"whitelisted"`
 	BytesReceived  PeerInfoBytesSent `json:"bytessent_per_msg"`
 	BytesSend      PeerInfoBytesSent `json:"bytesrecv_per_msg"`
+	Hostname       string
 }
 
 type PeerInfoBytesSent struct {
@@ -93,6 +96,23 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 
 	if err != nil {
 		return nil, err
+	}
+
+	for i, peer := range result {
+		host, _, _ := net.SplitHostPort(peer.Addr)
+		names, err := net.LookupAddr(host)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if len(names) == 0 {
+			log.Println("Names not found for " + peer.Addr)
+			continue
+		}
+
+		result[i].Hostname = names[0]
 	}
 
 	return result, nil

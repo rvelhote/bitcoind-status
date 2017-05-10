@@ -22,13 +22,6 @@
 
 <header class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-
-        <div class="col-lg-12">
-            <div class="logo">
-                <img src="/assets/images/bitcoin.svg" />
-            </div>
-        </div>
-
         {{if .Network.Warnings}}
             <div class="col-lg-12">
                 <div class="alert alert-warning">{{.Network.Warnings}}</div>
@@ -112,7 +105,10 @@
         <tbody>
             {{ range $key, $value := .Peers }}
                 <tr>
-                    <td>{{ $value.Addr }}</td>
+                    <td>
+                        <div>{{ $value.Addr }}</div>
+                        <div>{{ $value.Hostname }}</div>
+                    </td>
                     <td>{{ $value.Services }}</td>
                     <td>{{ $value.RelayTxes }}</td>
                     <td>{{ $value.BytesSent }}</td>
