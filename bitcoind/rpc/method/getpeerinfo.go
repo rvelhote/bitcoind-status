@@ -82,6 +82,24 @@ type PeerInfoBytesReceived struct {
 	Version uint `json:"version"`
 }
 
+// hostname fetches the hostname associated to the peer's ip address and sets it automatically (just call the func).
+func (p *PeerInfo) hostname() error {
+	host, _, _ := net.SplitHostPort(p.Addr)
+	names, err := net.LookupAddr(host)
+
+	if err != nil {
+		return err
+	}
+
+	if len(names) == 0 {
+		log.Println("Names not found for " + p.Addr)
+		return nil
+	}
+
+	p.Hostname = names[0]
+	return nil
+}
+
 func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 	response, err := client.Post("getpeerinfo", PeerInfoArgs{})
 
@@ -98,21 +116,8 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 		return nil, err
 	}
 
-	for i, peer := range result {
-		host, _, _ := net.SplitHostPort(peer.Addr)
-		names, err := net.LookupAddr(host)
-
-		if err != nil {
-			log.Println(err)
-			continue
-		}
-
-		if len(names) == 0 {
-			log.Println("Names not found for " + peer.Addr)
-			continue
-		}
-
-		result[i].Hostname = names[0]
+	for i, _ := range result {
+		result[i].hostname();
 	}
 
 	return result, nil
