@@ -37,6 +37,7 @@ type IndexTemplateParams struct {
 	Peers   []method.PeerInfo
 	Network method.NetworkInfo
 	Banned  []method.Banned
+	Mempool method.MempoolInfo
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -72,11 +73,17 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		log.Fatal(err)
 	}
 
+	mempool, err := method.GetMempoolInfo(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	params := IndexTemplateParams{
 		Title:   "Bitcoin Daemon Status",
 		Peers:   peerinfo,
 		Network: networkinfo,
 		Banned:  banned,
+		Mempool: mempool,
 	}
 
 	err = t.Execute(w, params)

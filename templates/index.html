@@ -142,7 +142,38 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12">
+
+        <div class="col-lg-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Mempool Info</div>
+                <div class="panel-body">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div class="value">{{.Mempool.Size}}</div>
+                            <div class="key">SIZE</div>
+                        </li>
+                        <li>
+                            <div class="value">{{.Mempool.Humanize.Bytes}}</div>
+                            <div class="key">TOTAL TX</div>
+                        </li>
+                        <li>
+                            <div class="value">{{.Mempool.Humanize.Usage}}</div>
+                            <div class="key">TOTAL MEMORY USAGE</div>
+                        </li>
+                        <li>
+                            <div class="value">{{.Mempool.Humanize.MaxMempool}}</div>
+                            <div class="key">MAXIMUM MEMORY USAGE</div>
+                        </li>
+                        <li>
+                            <div class="value">{{.Mempool.MempoolMinFee}}</div>
+                            <div class="key">MINIMUM FEE</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">Banned</div>
                 <div class="panel-body">
