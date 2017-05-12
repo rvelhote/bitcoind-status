@@ -40,6 +40,8 @@
 </head>
 <body>
 
+{{ $addednodes := .AddedNodeInfo }}
+
 <header class="navbar navbar-default">
     <div class="container-fluid">
         {{if .Network.Warnings}}
@@ -129,6 +131,12 @@
                             <td>
                                 <div>{{ $value.Addr }}</div>
                                 <div>{{ $value.Humanize.Hostname }}</div>
+
+                                {{ range $k, $v := $addednodes }}
+                                    {{if eq $v.AddedNode $value.Addr }}
+                                        <div><span class="label label-primary">manual</span></div>
+                                    {{ end }}
+                                {{ end }}
                             </td>
                             <td>{{ $value.Services }}</td>
                             <td>{{ $value.Humanize.BytesSent }}</td>
