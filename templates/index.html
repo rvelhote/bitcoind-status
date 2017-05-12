@@ -207,6 +207,33 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">(Manually) Added Nodes</div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Node</th>
+                            <th>Connected</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{ range $key, $value := .AddedNodeInfo }}
+                        <tr>
+                            <td>
+                                <div>{{ $value.AddedNode }}</div>
+                                <div>{{ $value.Humanized.AddedNode}}</div>
+                            </td>
+                            <td>{{ $value.Connected }}</td>
+                        </tr>
+                        {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
