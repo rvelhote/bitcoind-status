@@ -28,12 +28,12 @@
             font-weight: bold;
         }
 
-        ul.list-unstyled li {
+        ul.list-localhost.list-unstyled li {
             margin-bottom: 15px;
             text-align: center;
         }
 
-        ul.list-unstyled li:last-child {
+        ul.list-localhost.list-unstyled li:last-child {
             margin-bottom: 0;
         }
     </style>
@@ -52,7 +52,7 @@
 
         <div class="col-lg-12">
             <div class="col-lg-3">
-                <ul class="list-unstyled" style="padding: 20px 0;">
+                <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
                         <div class="value">{{.Network.Subversion}}</div>
                         <div class="key">USER AGENT</div>
@@ -65,7 +65,7 @@
             </div>
 
             <div class="col-lg-3">
-                <ul class="list-unstyled" style="padding: 20px 0;">
+                <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
                         <div class="value">{{.Network.Version}}</div>
                         <div class="key">VERSION</div>
@@ -77,7 +77,7 @@
                 </ul>
             </div>
             <div class="col-lg-3">
-                <ul class="list-unstyled" style="padding: 20px 0;">
+                <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
                         <div class="value">{{.Network.Connections}}</div>
                         <div class="key">CONNECTIONS</div>
@@ -89,7 +89,7 @@
                 </ul>
             </div>
             <div class="col-lg-2">
-                <ul class="list-unstyled" style="padding: 20px 0;">
+                <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
                         <div class="value">--</div>
                         <div class="key">--</div>
@@ -133,11 +133,17 @@
 
                                 {{ range $k, $v := $addednodes }}
                                     {{if eq $v.AddedNode $value.Addr }}
-                                        <div><span class="label label-primary">manual</span></div>
+                                        <div><span class="label label-default">MANUAL</span></div>
                                     {{ end }}
                                 {{ end }}
                             </td>
-                            <td>{{ $value.Services }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {{ range $k, $v := $value.Humanize.Services }}
+                                        <li style="margin-bottom: 0;"><span class="label label-default">{{ $v }}</span></li>
+                                    {{ end }}
+                                </ul>
+                            </td>
                             <td>
                                 <abbr title="{{ $value.BytesSent }} bytes">{{ $value.Humanize.BytesSent }}</abbr>
                             </td>
@@ -162,7 +168,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Mempool Info</div>
                 <div class="panel-body">
-                    <ul class="list-unstyled">
+                    <ul class="list-localhost list-unstyled">
                         <li>
                             <div class="value">{{.Mempool.Size}}</div>
                             <div class="key">SIZE</div>
