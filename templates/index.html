@@ -50,7 +50,13 @@
         </div>
         {{end}}
 
-        <div class="col-lg-12">
+        <div class="col-lg-2">
+            <div style="text-align: center;margin-top: 44px;">
+                <img src="/assets/images/bitcoin.svg" />
+            </div>
+        </div>
+
+        <div class="col-lg-10">
             <div class="col-lg-3">
                 <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
@@ -111,16 +117,15 @@
                 <div class="panel-heading">Peers</div>
                 <div class="panel-body">
 
-                    <table class="table table-striped">
+                    <table class="table table-striped" style="table-layout: fixed;">
                         <thead>
                         <tr>
-                            <th>IP Address</th>
-                            <th>Services</th>
-                            <th>Data Sent</th>
-                            <th>Data Received</th>
-                            <th>Connection Time</th>
-                            <th>Ping</th>
-                            <th>Client</th>
+                            <th style="width: 30%">Client</th>
+                            <th style="text-align: center;">Services</th>
+                            <th style="text-align: center;">Data Sent</th>
+                            <th style="text-align: center;">Data Received</th>
+                            <th style="text-align: center;">Connection Time</th>
+                            <th style="text-align: center;">Ping</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -128,30 +133,30 @@
                         <tr>
                             <td>
                                 <div>{{ $value.Addr }}</div>
+                                <div>{{ $value.Subver }}</div>
                                 <!--<div>{{ $value.Humanize.Hostname }}</div>-->
 
                                 {{if $value.AddNode }}
                                     <div><span class="label label-default">MANUAL</span></div>
                                 {{ end }}
                             </td>
-                            <td>
+                            <td style="text-align: center;">
                                 <ul class="list-unstyled">
                                     {{ range $k, $v := $value.Humanize.Services }}
-                                        <li style="margin-bottom: 0;"><span class="label label-default">{{ $v }}</span></li>
+                                        <li style="margin-bottom: 4px;"><span style="display: block;" class="label label-default">{{ $v }}</span></li>
                                     {{ end }}
                                 </ul>
                             </td>
-                            <td>
+                            <td style="text-align: center;">
                                 <abbr title="{{ $value.BytesSent }} bytes">{{ $value.Humanize.BytesSent }}</abbr>
                             </td>
-                            <td>
+                            <td style="text-align: center;">
                                 <abbr title="{{ $value.BytesRecv }} bytes">{{ $value.Humanize.BytesRecv }}</abbr>
                             </td>
-                            <td>
+                            <td style="text-align: center;">
                                 <time title="{{ $value.ConnTime }}">{{ $value.Humanize.ConnTime }}</time>
                             </td>
-                            <td>{{ $value.Humanize.PingTime }}ms</td>
-                            <td>{{ $value.Subver }}</td>
+                            <td style="text-align: center;">{{ $value.Humanize.PingTime }}ms</td>
                         </tr>
                         {{ end }}
                         </tbody>
