@@ -30,6 +30,7 @@ import (
 	"log"
 	"net"
 	"strconv"
+	"math"
 )
 
 type PeerInfoArgs struct {
@@ -47,7 +48,7 @@ type PeerInfo struct {
 	BytesRecv      uint64            `json:"bytesrecv"`
 	ConnTime       timestamp.Unix    `json:"conntime"`
 	TimeOffset     int               `json:"timeoffset"`
-	PingTime       float32           `json:"pingtime"`
+	PingTime       float64           `json:"pingtime"`
 	MinPing        float64           `json:"minping"`
 	Version        uint              `json:"version"`
 	Subver         string            `json:"subver"`
@@ -69,6 +70,7 @@ type PeerInfoHumanize struct {
 	BytesRecv string
 	ConnTime  string
 	Services []string
+	PingTime string
 }
 
 type PeerInfoBytesSent struct {
@@ -196,6 +198,7 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 		result[i].Humanize.BytesSent = humanize.Bytes(peer.BytesSent)
 		result[i].Humanize.ConnTime = humanize.Time(peer.ConnTime.Time)
 		result[i].Humanize.Services = Services(peer.Services)
+		result[i].Humanize.PingTime = strconv.FormatInt(int64(math.Ceil(peer.PingTime * 1000)), 10)
 	}
 
 	return result, nil
