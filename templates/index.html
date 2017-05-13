@@ -119,7 +119,6 @@
                             <th>BytesSent</th>
                             <th>BytesRecv</th>
                             <th>ConnTime</th>
-                            <th>TimeOffset</th>
                             <th>PingTime</th>
                             <th>Subver</th>
                             <th>SynchedBlocks</th>
@@ -139,10 +138,15 @@
                                 {{ end }}
                             </td>
                             <td>{{ $value.Services }}</td>
-                            <td>{{ $value.Humanize.BytesSent }}</td>
-                            <td>{{ $value.Humanize.BytesRecv }}</td>
-                            <td>{{ $value.Humanize.ConnTime }}</td>
-                            <td>{{ $value.TimeOffset }}</td>
+                            <td>
+                                <abbr title="{{ $value.BytesSent }} bytes">{{ $value.Humanize.BytesSent }}</abbr>
+                            </td>
+                            <td>
+                                <abbr title="{{ $value.BytesRecv }} bytes">{{ $value.Humanize.BytesRecv }}</abbr>
+                            </td>
+                            <td>
+                                <time title="{{ $value.ConnTime }}">{{ $value.Humanize.ConnTime }}</time>
+                            </td>
                             <td>{{ $value.PingTime }}</td>
                             <td>{{ $value.Subver }}</td>
                             <td>{{ $value.SynchedBlocks }}</td>
