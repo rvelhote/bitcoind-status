@@ -131,10 +131,8 @@
                                 <div>{{ $value.Addr }}</div>
                                 <div>{{ $value.Humanize.Hostname }}</div>
 
-                                {{ range $k, $v := $addednodes }}
-                                    {{if eq $v.AddedNode $value.Addr }}
-                                        <div><span class="label label-default">MANUAL</span></div>
-                                    {{ end }}
+                                {{if $value.AddNode }}
+                                    <div><span class="label label-default">MANUAL</span></div>
                                 {{ end }}
                             </td>
                             <td>
