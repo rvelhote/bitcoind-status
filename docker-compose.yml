@@ -22,9 +22,16 @@ services:
   web:
     container_name: bitcoind-status
     image: bitcoind-status
+    volumes:
+      - ./conf:/go/src/github.com/rvelhote/bitcoind-status/conf
     ports:
       - "8080:8080"
 
   bitcoind:
     container_name: bitcoind-daemon
     image: kylemanna/bitcoind
+    ports:
+      - "8332:8332"
+    environment:
+      - RPCUSER=mysecretrpcuser
+      - RPCPASSWORD=mysecretrpcpassword
