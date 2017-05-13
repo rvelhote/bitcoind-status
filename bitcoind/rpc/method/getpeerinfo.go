@@ -241,7 +241,7 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 	}
 
 	for i, peer := range result {
-		result[i].Humanize.Hostname, _ = Hostname(peer.Addr)
+		result[i].Humanize.Hostname = peer.Addr // , _ = Hostname(peer.Addr)
 		result[i].Humanize.BytesRecv = humanize.Bytes(peer.BytesRecv)
 		result[i].Humanize.BytesSent = humanize.Bytes(peer.BytesSent)
 		result[i].Humanize.ConnTime = humanize.Time(peer.ConnTime.Time)

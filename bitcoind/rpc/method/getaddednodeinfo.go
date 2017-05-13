@@ -67,7 +67,7 @@ func GetAddedNodeInfo(client *rpc.RPCClient) ([]AddedNodeInfo, error) {
     }
 
     for i, peer := range result {
-        result[i].Humanized.AddedNode, _ = Hostname(peer.AddedNode)
+        result[i].Humanized.AddedNode = peer.AddedNode // , _ = Hostname(peer.AddedNode)
     }
 
     return result, nil
