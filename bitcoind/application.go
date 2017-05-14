@@ -39,6 +39,7 @@ type IndexTemplateParams struct {
 	Banned  []method.Banned
 	Mempool method.MempoolInfo
 	AddedNodeInfo []method.AddedNodeInfo
+	NetTotals method.NetTotals
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -84,6 +85,11 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		log.Fatal(err)
 	}
 
+	nettotals, err := method.GetNetTotals(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	params := IndexTemplateParams{
 		Title:   "Bitcoin Daemon Status",
 		Peers:   peerinfo,
@@ -91,6 +97,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		Banned:  banned,
 		Mempool: mempool,
 		AddedNodeInfo: addednodeinfo,
+		NetTotals: nettotals,
 	}
 
 	err = t.Execute(w, params)
