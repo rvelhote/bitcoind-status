@@ -89,20 +89,24 @@
                         <div class="key">CONNECTIONS</div>
                     </li>
                     <li>
-                        <div class="value">--</div>
-                        <div class="key">--</div>
+                        <div class="value">{{.NetTotals.TimeMillis.Time | time }}</div>
+                        <div class="key">CURRENT TIME</div>
                     </li>
                 </ul>
             </div>
             <div class="col-lg-2">
                 <ul class="list-localhost list-unstyled" style="padding: 20px 0;">
                     <li>
-                        <div class="value">--</div>
-                        <div class="key">--</div>
+                        <div class="value">
+                            <abbr title="{{ .NetTotals.TotalBytesRecv }} bytes">{{.NetTotals.TotalBytesRecv | bytes }}</abbr>
+                        </div>
+                        <div class="key">DATA RECEIVED</div>
                     </li>
                     <li>
-                        <div class="value">--</div>
-                        <div class="key">--</div>
+                        <div class="value">
+                            <abbr title="{{ .NetTotals.TotalBytesSent }} bytes">{{.NetTotals.TotalBytesSent | bytes }}</abbr>
+                        </div>
+                        <div class="key">DATA SENT</div>
                     </li>
                 </ul>
             </div>
