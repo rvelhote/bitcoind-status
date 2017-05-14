@@ -2,8 +2,8 @@
 package method
 
 import (
-    "github.com/gorilla/rpc/v2/json2"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/gorilla/rpc/v2/json2"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 )
 
 /*
@@ -28,47 +28,37 @@ import (
  * SOFTWARE.
  */
 type AddedNodeInfo struct {
-    // AddedNode is the node ip address or name (as provided to addnode)
-    AddedNode string `json:"addednode"`
-    // Connected is a boolean that specifies if we are currently connected to the node
-    Connected bool `json:"connected"`
-    // Addresses is a list of addresses of the added node. Only present if connected == true
-    Addresses []AddedNodeAddress `json:"addresses"`
-    // Humanize turns some information in this structure into something those pesky humans can read
-    Humanized HumanizedAddedNodeInfo
+	// AddedNode is the node ip address or name (as provided to addnode)
+	AddedNode string `json:"addednode"`
+	// Connected is a boolean that specifies if we are currently connected to the node
+	Connected bool `json:"connected"`
+	// Addresses is a list of addresses of the added node. Only present if connected == true
+	Addresses []AddedNodeAddress `json:"addresses"`
 }
 
 type AddedNodeAddress struct {
-    // Address is the bitcoin server IP and port we're connected to
-    Address string `json:"address"`
-    // Connected specified wether the connection is inbound or outbound
-    Connected string `json:"connected"`
-}
-
-type HumanizedAddedNodeInfo struct {
-    AddedNode string
+	// Address is the bitcoin server IP and port we're connected to
+	Address string `json:"address"`
+	// Connected specified wether the connection is inbound or outbound
+	Connected string `json:"connected"`
 }
 
 // GetAddedNodeInfo Returns information about the given added node, or all added nodes.
 func GetAddedNodeInfo(client *rpc.RPCClient) ([]AddedNodeInfo, error) {
-    response, err := client.Post("getaddednodeinfo", PeerInfoArgs{})
+	response, err := client.Post("getaddednodeinfo", PeerInfoArgs{})
 
-    if err != nil {
-        return []AddedNodeInfo{}, err
-    }
+	if err != nil {
+		return []AddedNodeInfo{}, err
+	}
 
-    defer response.Body.Close()
+	defer response.Body.Close()
 
-    var result []AddedNodeInfo
-    err = json2.DecodeClientResponse(response.Body, &result)
+	var result []AddedNodeInfo
+	err = json2.DecodeClientResponse(response.Body, &result)
 
-    if err != nil {
-        return []AddedNodeInfo{}, err
-    }
+	if err != nil {
+		return []AddedNodeInfo{}, err
+	}
 
-    for i, peer := range result {
-        result[i].Humanized.AddedNode = peer.AddedNode // , _ = Hostname(peer.AddedNode)
-    }
-
-    return result, nil
+	return result, nil
 }

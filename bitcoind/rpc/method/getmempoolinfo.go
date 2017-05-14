@@ -23,58 +23,53 @@ package method
  * SOFTWARE.
  */
 import (
-    "github.com/gorilla/rpc/v2/json2"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
-    "github.com/dustin/go-humanize"
+	"github.com/gorilla/rpc/v2/json2"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 )
 
 type MempoolInfo struct {
-    // Size is the current transaction count.
-    Size uint `json:"size"`
+	// Size is the current transaction count.
+	Size uint `json:"size"`
 
-    // Bytes is the sum of all virtual transaction sizes as defined in BIP 141. Differs from actual serialized size
-    // because witness data is discounted
-    Bytes uint64 `json:"bytes"`
+	// Bytes is the sum of all virtual transaction sizes as defined in BIP 141. Differs from actual serialized size
+	// because witness data is discounted
+	Bytes uint64 `json:"bytes"`
 
-    // Usage is the total memory usage for the mempool.
-    Usage uint64 `json:"usage"`
+	// Usage is the total memory usage for the mempool.
+	Usage uint64 `json:"usage"`
 
-    // MaxMempool is the maximum memory usage for the mempool.
-    MaxMempool uint64 `json:"maxmempool"`
+	// MaxMempool is the maximum memory usage for the mempool.
+	MaxMempool uint64 `json:"maxmempool"`
 
-    // MempoolMinFee is the minimum fee for transaction to be accepted into the mempool.
-    MempoolMinFee float64 `json:"mempoolminfee"`
+	// MempoolMinFee is the minimum fee for transaction to be accepted into the mempool.
+	MempoolMinFee float64 `json:"mempoolminfee"`
 
-    // Humanize humanizes the units (bytes, timestamps) that belong to this structure.
-    Humanize HumanizedMempoolInfo
+	// Humanize humanizes the units (bytes, timestamps) that belong to this structure.
+	Humanize HumanizedMempoolInfo
 }
 
 type HumanizedMempoolInfo struct {
-    Bytes string
-    Usage string
-    MaxMempool string
+	Bytes      string
+	Usage      string
+	MaxMempool string
 }
 
 // GetMempoolInfo returns details on the active state of the TX memory pool.
 func GetMempoolInfo(client *rpc.RPCClient) (MempoolInfo, error) {
-    response, err := client.Post("getmempoolinfo", PeerInfoArgs{})
+	response, err := client.Post("getmempoolinfo", PeerInfoArgs{})
 
-    if err != nil {
-        return MempoolInfo{}, err
-    }
+	if err != nil {
+		return MempoolInfo{}, err
+	}
 
-    defer response.Body.Close()
+	defer response.Body.Close()
 
-    var result MempoolInfo
-    err = json2.DecodeClientResponse(response.Body, &result)
+	var result MempoolInfo
+	err = json2.DecodeClientResponse(response.Body, &result)
 
-    if err != nil {
-        return MempoolInfo{}, err
-    }
+	if err != nil {
+		return MempoolInfo{}, err
+	}
 
-    result.Humanize.Bytes = humanize.Bytes(result.Bytes)
-    result.Humanize.Usage = humanize.Bytes(result.Usage)
-    result.Humanize.MaxMempool = humanize.Bytes(result.MaxMempool)
-
-    return result, nil
+	return result, nil
 }

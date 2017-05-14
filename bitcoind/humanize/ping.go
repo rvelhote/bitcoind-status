@@ -1,5 +1,5 @@
-// Package method is a package
-package method
+// Package humanize contains funcs that will turn raw data from bitcoind into human readable data
+package humanize
 
 /*
  * The MIT License (MIT)
@@ -23,33 +23,11 @@ package method
  * SOFTWARE.
  */
 import (
-	"github.com/gorilla/rpc/v2/json2"
-	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
-	"github.com/rvelhote/timestamp-marshal"
+	"math"
+	"strconv"
 )
 
-type Banned struct {
-	Address     string         `json:"address"`
-	BannedUntil timestamp.Unix `json:"banned_until"`
-	BanCreated  timestamp.Unix `json:"ban_created"`
-	BanReason   string         `json:"ban_reason"`
-}
-
-func ListBanned(client *rpc.RPCClient) ([]Banned, error) {
-	response, err := client.Post("listbanned", PeerInfoArgs{})
-
-	if err != nil {
-		return []Banned{}, err
-	}
-
-	defer response.Body.Close()
-
-	var result []Banned
-	err = json2.DecodeClientResponse(response.Body, &result)
-
-	if err != nil {
-		return []Banned{}, err
-	}
-
-	return result, nil
+// Ping will convert the value, which is in seconds, into a format that's better recognized by humans (or at least me).
+func Ping(ms float64) string {
+	return strconv.FormatInt(int64(math.Ceil(ms*1000)), 10)
 }

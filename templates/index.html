@@ -134,7 +134,6 @@
                             <td>
                                 <div>{{ $value.Addr }}</div>
                                 <div>{{ $value.Subver }}</div>
-                                <!--<div>{{ $value.Humanize.Hostname }}</div>-->
 
                                 {{if $value.AddNode }}
                                     <div><span class="label label-default">MANUAL</span></div>
@@ -142,21 +141,21 @@
                             </td>
                             <td style="text-align: center;">
                                 <ul class="list-unstyled">
-                                    {{ range $k, $v := $value.Humanize.Services }}
+                                    {{ range $v := ($value.Services | serviceflag) }}
                                         <li style="margin-bottom: 4px;"><span style="display: block;" class="label label-default">{{ $v }}</span></li>
                                     {{ end }}
                                 </ul>
                             </td>
                             <td style="text-align: center;">
-                                <abbr title="{{ $value.BytesSent }} bytes">{{ $value.Humanize.BytesSent }}</abbr>
+                                <abbr title="{{ $value.BytesSent }} bytes">{{ $value.BytesSent | bytes }}</abbr>
                             </td>
                             <td style="text-align: center;">
-                                <abbr title="{{ $value.BytesRecv }} bytes">{{ $value.Humanize.BytesRecv }}</abbr>
+                                <abbr title="{{ $value.BytesRecv }} bytes">{{ $value.BytesRecv | bytes }}</abbr>
                             </td>
                             <td style="text-align: center;">
-                                <time title="{{ $value.ConnTime }}">{{ $value.Humanize.ConnTime }}</time>
+                                <time title="{{ $value.ConnTime }}">{{ $value.ConnTime.Time | time }}</time>
                             </td>
-                            <td style="text-align: center;">{{ $value.Humanize.PingTime }}ms</td>
+                            <td style="text-align: center;">{{ $value.PingTime | ping }}ms</td>
                         </tr>
                         {{ end }}
                         </tbody>
@@ -175,15 +174,15 @@
                             <div class="key">SIZE</div>
                         </li>
                         <li>
-                            <div class="value">{{.Mempool.Humanize.Bytes}}</div>
+                            <div class="value">{{.Mempool.Bytes | bytes}}</div>
                             <div class="key">TOTAL TX</div>
                         </li>
                         <li>
-                            <div class="value">{{.Mempool.Humanize.Usage}}</div>
+                            <div class="value">{{.Mempool.Usage | bytes}}</div>
                             <div class="key">TOTAL MEMORY USAGE</div>
                         </li>
                         <li>
-                            <div class="value">{{.Mempool.Humanize.MaxMempool}}</div>
+                            <div class="value">{{.Mempool.MaxMempool | bytes}}</div>
                             <div class="key">MAXIMUM MEMORY USAGE</div>
                         </li>
                         <li>
@@ -211,15 +210,12 @@
                         <tbody>
                         {{ range $key, $value := .Banned }}
                             <tr>
+                                <td>{{ $value.Address }}</td>
                                 <td>
-                                    <div>{{ $value.Address }}</div>
-                                    <div>{{ $value.Humanized.Address}}</div>
+                                    <time title="{{ $value.BannedUntil }}">{{ $value.BannedUntil.Time | time }}</time>
                                 </td>
                                 <td>
-                                    <time title="{{ $value.BannedUntil }}">{{ $value.Humanized.BannedUntil }}</time>
-                                </td>
-                                <td>
-                                    <time title="{{ $value.BanCreated }}">{{ $value.Humanized.BanCreated }}</time>
+                                    <time title="{{ $value.BanCreated }}">{{ $value.BanCreated.Time | time }}</time>
                                 </td>
                                 <td>{{ $value.BanReason }}</td>
                             </tr>
@@ -246,7 +242,6 @@
                         <tr>
                             <td>
                                 <div>{{ $value.AddedNode }}</div>
-                                <div>{{ $value.Humanized.AddedNode}}</div>
                             </td>
                             <td>{{ $value.Connected }}</td>
                         </tr>

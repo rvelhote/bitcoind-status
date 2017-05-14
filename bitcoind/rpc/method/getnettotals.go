@@ -23,45 +23,45 @@ package method
  * SOFTWARE.
  */
 import (
-    "github.com/rvelhote/timestamp-marshal"
-    "time"
-    "github.com/gorilla/rpc/v2/json2"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/gorilla/rpc/v2/json2"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/rvelhote/timestamp-marshal"
+	"time"
 )
 
 // NetTotals is the struct that contains information about the amount of data transfered by our node as well as
 // possible restrictions/limitations on the amount of transferred data.
 type NetTotals struct {
-    TotalBytesRecv uint64 `json:"totalbytesrecv"`
-    TotalBytesSent uint64 `json:"totalbytessent"`
-    TimeMillis timestamp.Unix `json:"timemillis"`
-    UploadTarget UploadTarget `json:"uploadtarget"`
+	TotalBytesRecv uint64         `json:"totalbytesrecv"`
+	TotalBytesSent uint64         `json:"totalbytessent"`
+	TimeMillis     timestamp.Unix `json:"timemillis"`
+	UploadTarget   UploadTarget   `json:"uploadtarget"`
 }
 
 type UploadTarget struct {
-    Timeframe time.Duration `json:"timeframe"`
-    Target uint `json:"target"`
-    TargetReached bool `json:"target_reached"`
-    ServeHistoricalBlocks bool `json:"serve_historical_blocks"`
-    BytesLeftInCycle uint64 `json:"bytes_left_in_cycle"`
-    TimeLeftInCycle uint64 `json:"time_left_in_cycle"`
+	Timeframe             time.Duration `json:"timeframe"`
+	Target                uint          `json:"target"`
+	TargetReached         bool          `json:"target_reached"`
+	ServeHistoricalBlocks bool          `json:"serve_historical_blocks"`
+	BytesLeftInCycle      uint64        `json:"bytes_left_in_cycle"`
+	TimeLeftInCycle       uint64        `json:"time_left_in_cycle"`
 }
 
 func GetNetTotals(client *rpc.RPCClient) (NetTotals, error) {
-    response, err := client.Post("getnettotals", PeerInfoArgs{})
+	response, err := client.Post("getnettotals", PeerInfoArgs{})
 
-    if err != nil {
-        return NetTotals{}, err
-    }
+	if err != nil {
+		return NetTotals{}, err
+	}
 
-    defer response.Body.Close()
+	defer response.Body.Close()
 
-    var result NetTotals
-    err = json2.DecodeClientResponse(response.Body, &result)
+	var result NetTotals
+	err = json2.DecodeClientResponse(response.Body, &result)
 
-    if err != nil {
-        return NetTotals{}, err
-    }
+	if err != nil {
+		return NetTotals{}, err
+	}
 
-    return result, nil
+	return result, nil
 }

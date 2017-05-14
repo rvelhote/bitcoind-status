@@ -23,14 +23,11 @@ package method
  * SOFTWARE.
  */
 import (
-	"github.com/dustin/go-humanize"
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/timestamp-marshal"
 	"log"
-	"math"
 	"net"
-	"strconv"
 )
 
 type PeerInfoArgs struct {
@@ -108,18 +105,6 @@ type PeerInfo struct {
 
 	// BytesReceivedPerMsg is the total bytes received aggregated by message type
 	BytesReceivedPerMsg PeerInfoBytesSent `json:"bytesrecv_per_msg"`
-
-	// Humanize contains humanized data from the raw data in this
-	Humanize PeerInfoHumanize
-}
-
-type PeerInfoHumanize struct {
-	Hostname  string
-	BytesSent string
-	BytesRecv string
-	ConnTime  string
-	Services  []string
-	PingTime  string
 }
 
 type PeerInfoBytesSent struct {
@@ -143,34 +128,6 @@ type PeerInfoBytesReceived struct {
 	Version uint `json:"version"`
 }
 
-const (
-	// Nothing
-	NODE_NONE uint64 = 0
-
-	// NODE_NETWORK means that the node is capable of serving the block chain. It is currently
-	// set by all Bitcoin Core nodes, and is unset by SPV clients or other peers that just want
-	// network services but don't provide them.
-	NODE_NETWORK uint64 = 1 << 0
-
-	// NODE_GETUTXO means the node is capable of responding to the getutxo protocol request.
-	// Bitcoin Core does not support this but a patch set called Bitcoin XT does.
-	// See BIP 64 for details on how this is implemented.
-	NODE_GETUTXO uint64 = 1 << 1
-
-	// NODE_BLOOM means the node is capable and willing to handle bloom-filtered connections.
-	// Bitcoin Core nodes used to support this by default, without advertising this bit,
-	// but no longer do as of protocol version 70011 (= NO_BLOOM_VERSION)
-	NODE_BLOOM uint64 = 1 << 2
-
-	// NODE_WITNESS indicates that a node can be asked for blocks and transactions including
-	// witness data.
-	NODE_WITNESS uint64 = 1 << 3
-
-	// NODE_XTHIN means the node supports Xtreme Thinblocks
-	// If this is turned off then the node will not service nor make xthin requests
-	NODE_XTHIN uint64 = 1 << 4
-)
-
 // hostname fetches the hostname associated to the peer's ip address and sets it automatically (just call the func).
 func Hostname(ipaddress string) (string, error) {
 	host, _, _ := net.SplitHostPort(ipaddress)
@@ -188,42 +145,6 @@ func Hostname(ipaddress string) (string, error) {
 	return names[0], nil
 }
 
-// HasServiceFlag checks the services flag sent by a peer and determines if a certain flag is set.
-func HasServiceFlag(services string, flag uint64) bool {
-	dec, _ := strconv.ParseUint(services, 16, 64)
-	return (dec & flag) != 0
-}
-
-func Services(flag string) []string {
-	available := []string{}
-
-	if HasServiceFlag(flag, NODE_NONE) {
-		available = append(available, "NODE_NONE")
-	}
-
-	if HasServiceFlag(flag, NODE_NETWORK) {
-		available = append(available, "NODE_NETWORK")
-	}
-
-	if HasServiceFlag(flag, NODE_GETUTXO) {
-		available = append(available, "NODE_GETUTXO")
-	}
-
-	if HasServiceFlag(flag, NODE_BLOOM) {
-		available = append(available, "NODE_BLOOM")
-	}
-
-	if HasServiceFlag(flag, NODE_WITNESS) {
-		available = append(available, "NODE_WITNESS")
-	}
-
-	if HasServiceFlag(flag, NODE_XTHIN) {
-		available = append(available, "NODE_XTHIN")
-	}
-
-	return available
-}
-
 func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 	response, err := client.Post("getpeerinfo", PeerInfoArgs{})
 
@@ -238,15 +159,6 @@ func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	for i, peer := range result {
-		result[i].Humanize.Hostname = peer.Addr // , _ = Hostname(peer.Addr)
-		result[i].Humanize.BytesRecv = humanize.Bytes(peer.BytesRecv)
-		result[i].Humanize.BytesSent = humanize.Bytes(peer.BytesSent)
-		result[i].Humanize.ConnTime = humanize.Time(peer.ConnTime.Time)
-		result[i].Humanize.Services = Services(peer.Services)
-		result[i].Humanize.PingTime = strconv.FormatInt(int64(math.Ceil(peer.PingTime*1000)), 10)
 	}
 
 	return result, nil

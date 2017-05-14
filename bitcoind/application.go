@@ -23,6 +23,8 @@ package bitcoind
  * SOFTWARE.
  */
 import (
+	"github.com/dustin/go-humanize"
+	humanize2 "github.com/rvelhote/bitcoind-status/bitcoind/humanize"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc/method"
 	"github.com/rvelhote/bitcoind-status/configuration"
@@ -33,13 +35,13 @@ import (
 
 // IndexTemplateParams holds various values to be passed to the main template
 type IndexTemplateParams struct {
-	Title   string
-	Peers   []method.PeerInfo
-	Network method.NetworkInfo
-	Banned  []method.Banned
-	Mempool method.MempoolInfo
+	Title         string
+	Peers         []method.PeerInfo
+	Network       method.NetworkInfo
+	Banned        []method.Banned
+	Mempool       method.MempoolInfo
 	AddedNodeInfo []method.AddedNodeInfo
-	NetTotals method.NetTotals
+	NetTotals     method.NetTotals
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -52,10 +54,17 @@ type IndexRequestHandler struct {
 // the RectJS app as well as some important configuration.
 func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
-	t, err := template.New("index.html").ParseFiles("templates/index.html")
 
+	funcs := template.FuncMap{
+		"bytes":       humanize.Bytes,
+		"time":        humanize.Time,
+		"serviceflag": humanize2.ServiceFlag,
+		"ping":        humanize2.Ping,
+	}
+
+	t, err := template.New("index.html").Funcs(funcs).ParseFiles("templates/index.html")
 	if err != nil {
-		t, _ = template.New("index.html").ParseFiles("../templates/index.html")
+		t, _ = template.New("index.html").Funcs(funcs).ParseFiles("../templates/index.html")
 	}
 
 	client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
@@ -91,13 +100,13 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 
 	params := IndexTemplateParams{
-		Title:   "Bitcoin Daemon Status",
-		Peers:   peerinfo,
-		Network: networkinfo,
-		Banned:  banned,
-		Mempool: mempool,
+		Title:         "Bitcoin Daemon Status",
+		Peers:         peerinfo,
+		Network:       networkinfo,
+		Banned:        banned,
+		Mempool:       mempool,
 		AddedNodeInfo: addednodeinfo,
-		NetTotals: nettotals,
+		NetTotals:     nettotals,
 	}
 
 	err = t.Execute(w, params)
