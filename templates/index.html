@@ -9,16 +9,11 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" href="/assets/favicon.ico" />
-    <link rel="icon" href="/assets/favicon.ico" />
+    <link rel="shortcut icon" href="/assets/favicon.ico"/>
+    <link rel="icon" href="/assets/favicon.ico"/>
 
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
     <style type="text/css">
-        .logo {
-            margin: 20px 0 35px 0;
-            text-align: center;
-        }
-
         .key {
             font-size: 10.2px;
         }
@@ -40,19 +35,17 @@
 </head>
 <body>
 
-{{ $addednodes := .AddedNodeInfo }}
-
 <header class="navbar navbar-default">
     <div class="container-fluid">
         {{if .Network.Warnings}}
-        <div class="col-lg-12">
+        <div class="col-lg-12" style="margin-top: 15px;">
             <div class="alert alert-warning">{{.Network.Warnings}}</div>
         </div>
         {{end}}
 
         <div class="col-lg-2">
             <div style="text-align: center;margin-top: 44px;">
-                <img src="/assets/images/bitcoin.svg" />
+                <img src="/assets/images/bitcoin.svg"/>
             </div>
         </div>
 
@@ -146,7 +139,9 @@
                             <td style="text-align: center;">
                                 <ul class="list-unstyled">
                                     {{ range $v := ($value.Services | serviceflag) }}
-                                        <li style="margin-bottom: 4px;"><span style="display: block;" class="label label-default">{{ $v }}</span></li>
+                                    <li style="margin-bottom: 4px;">
+                                        <span style="display: block;" class="label label-default">{{ $v }}</span>
+                                    </li>
                                     {{ end }}
                                 </ul>
                             </td>
@@ -202,6 +197,21 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Banned</div>
                 <div class="panel-body">
+
+                    <div class="col-lg-12">
+                        <form class="form-horizontal" method="post" action="/api/v1/bannode">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="node" placeholder="Node to Ban (ip:port)"/>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">Ban Node</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        <hr/>
+                    </div>
+
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -209,20 +219,27 @@
                             <th>Until</th>
                             <th>Created</th>
                             <th>Reason</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {{ range $key, $value := .Banned }}
-                            <tr>
-                                <td>{{ $value.Address }}</td>
-                                <td>
-                                    <time title="{{ $value.BannedUntil }}">{{ $value.BannedUntil.Time | time }}</time>
-                                </td>
-                                <td>
-                                    <time title="{{ $value.BanCreated }}">{{ $value.BanCreated.Time | time }}</time>
-                                </td>
-                                <td>{{ $value.BanReason }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ $value.Address }}</td>
+                            <td>
+                                <time title="{{ $value.BannedUntil }}">{{ $value.BannedUntil.Time | time }}</time>
+                            </td>
+                            <td>
+                                <time title="{{ $value.BanCreated }}">{{ $value.BanCreated.Time | time }}</time>
+                            </td>
+                            <td>{{ $value.BanReason }}</td>
+                            <td>
+                                <form class="form-horizontal" method="post" action="/api/v1/unbannode">
+                                    <button type="submit" class="btn btn-xs btn-warning">Unban Node</button>
+                                    <input type="hidden" name="node" value="{{ $value.Address }}"/>
+                                </form>
+                            </td>
+                        </tr>
                         {{ end }}
                         </tbody>
                     </table>
@@ -238,14 +255,14 @@
                         <form class="form-horizontal" method="post" action="/api/v1/addnode">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" name="node" placeholder="Node to Add (ip:port)" />
+                                    <input class="form-control" type="text" name="node" placeholder="Node to Add (ip:port)"/>
                                     <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-primary" >Add Node</button>
+                                        <button type="submit" class="btn btn-primary">Add Node</button>
                                     </span>
                                 </div>
                             </div>
                         </form>
-                        <hr />
+                        <hr/>
                     </div>
 
                     <table class="table table-striped">
@@ -257,20 +274,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                            {{ range $key, $value := .AddedNodeInfo }}
-                                <tr>
-                                    <td>
-                                        <div>{{ $value.AddedNode }}</div>
-                                    </td>
-                                    <td>{{ $value.Connected }}</td>
-                                    <td>
-                                        <form class="form-horizontal" method="post" action="/api/v1/removenode">
-                                            <button type="submit" class="btn btn-danger" >Remove Node</button>
-                                            <input type="hidden" name="node" value="{{ $value.AddedNode }}" />
-                                        </form>
-                                    </td>
-                                </tr>
-                            {{ end }}
+                        {{ range $key, $value := .AddedNodeInfo }}
+                        <tr>
+                            <td>
+                                <div>{{ $value.AddedNode }}</div>
+                            </td>
+                            <td>{{ $value.Connected }}</td>
+                            <td>
+                                <form class="form-horizontal" method="post" action="/api/v1/removenode">
+                                    <button type="submit" class="btn btn-xs btn-danger">Remove Node</button>
+                                    <input type="hidden" name="node" value="{{ $value.AddedNode }}"/>
+                                </form>
+                            </td>
+                        </tr>
+                        {{ end }}
                         </tbody>
                     </table>
                 </div>
