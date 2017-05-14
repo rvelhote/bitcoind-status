@@ -56,10 +56,11 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	w.Header().Add("Content-Type", "text/html")
 
 	funcs := template.FuncMap{
-		"bytes":       humanize.Bytes,
-		"time":        humanize.Time,
-		"serviceflag": humanize2.ServiceFlag,
-		"ping":        humanize2.Ping,
+		"bytes":           humanize.Bytes,
+		"time":            humanize.Time,
+		"serviceflag":     humanize2.ServiceFlag,
+		"serviceflagjoin": humanize2.ServiceFlagJoin,
+		"ping":            humanize2.Ping,
 	}
 
 	t, err := template.New("index.html").Funcs(funcs).ParseFiles("templates/index.html")

@@ -1,7 +1,10 @@
 // Package humanize contains funcs that will turn raw data from bitcoind into human readable data
 package humanize
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 /*
  * The MIT License (MIT)
@@ -88,4 +91,9 @@ func ServiceFlag(flag string) []string {
 	}
 
 	return available
+}
+
+// ServiceFlagJoin is a helper func to display the service flags in a single line.
+func ServiceFlagJoin(flag string) string {
+	return strings.Join(ServiceFlag(flag), ", ")
 }
