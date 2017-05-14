@@ -232,24 +232,45 @@
 
         <div class="col-lg-4">
             <div class="panel panel-default">
-                <div class="panel-heading">(Manually) Added Nodes</div>
+                <div class="panel-heading">Added Nodes</div>
                 <div class="panel-body">
+                    <div class="col-lg-12">
+                        <form class="form-horizontal" method="post" action="/api/v1/addnode">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="node" placeholder="Node to Add (ip:port)" />
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary" >Add Node</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                    </div>
+
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Node</th>
                             <th>Connected</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        {{ range $key, $value := .AddedNodeInfo }}
-                        <tr>
-                            <td>
-                                <div>{{ $value.AddedNode }}</div>
-                            </td>
-                            <td>{{ $value.Connected }}</td>
-                        </tr>
-                        {{ end }}
+                            {{ range $key, $value := .AddedNodeInfo }}
+                                <tr>
+                                    <td>
+                                        <div>{{ $value.AddedNode }}</div>
+                                    </td>
+                                    <td>{{ $value.Connected }}</td>
+                                    <td>
+                                        <form class="form-horizontal" method="post" action="/api/v1/removenode">
+                                            <button type="submit" class="btn btn-danger" >Remove Node</button>
+                                            <input type="hidden" name="node" value="{{ $value.AddedNode }}" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            {{ end }}
                         </tbody>
                     </table>
                 </div>
