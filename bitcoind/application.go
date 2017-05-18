@@ -31,6 +31,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 )
 
 // IndexTemplateParams holds various values to be passed to the main template
@@ -42,6 +43,7 @@ type IndexTemplateParams struct {
 	Mempool       method.MempoolInfo
 	AddedNodeInfo []method.AddedNodeInfo
 	NetTotals     method.NetTotals
+	Uptime        time.Duration
 }
 
 // IndexRequestHandler handles the requests to present the main url of the application
@@ -61,6 +63,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		"serviceflag":     humanize2.ServiceFlag,
 		"serviceflagjoin": humanize2.ServiceFlagJoin,
 		"ping":            humanize2.Ping,
+		"uptime":          humanize2.Uptime,
 	}
 
 	t, err := template.New("index.html").Funcs(funcs).ParseFiles("templates/index.html")
@@ -100,6 +103,11 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		log.Fatal(err)
 	}
 
+	uptime, err := method.Uptime(client)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	params := IndexTemplateParams{
 		Title:         "Bitcoin Daemon Status",
 		Peers:         peerinfo,
@@ -108,6 +116,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		Mempool:       mempool,
 		AddedNodeInfo: addednodeinfo,
 		NetTotals:     nettotals,
+		Uptime:        uptime,
 	}
 
 	err = t.Execute(w, params)

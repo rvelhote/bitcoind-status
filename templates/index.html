@@ -82,8 +82,10 @@
                         <div class="key">CONNECTIONS</div>
                     </li>
                     <li>
-                        <div class="value">{{.NetTotals.TimeMillis.Time | time }}</div>
-                        <div class="key">CURRENT TIME</div>
+                        <div class="value">
+                            <time>{{.Uptime | uptime }}</time>
+                        </div>
+                        <div class="key">UPTIME</div>
                     </li>
                 </ul>
             </div>
