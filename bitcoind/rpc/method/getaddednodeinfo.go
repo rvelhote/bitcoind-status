@@ -1,11 +1,6 @@
 // Package method is a package
 package method
 
-import (
-	"github.com/gorilla/rpc/v2/json2"
-	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
-)
-
 /*
  * The MIT License (MIT)
  *
@@ -27,6 +22,11 @@ import (
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import (
+	"github.com/gorilla/rpc/v2/json2"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+)
+
 type AddedNodeInfo struct {
 	// AddedNode is the node ip address or name (as provided to addnode)
 	AddedNode string `json:"addednode"`
