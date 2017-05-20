@@ -257,7 +257,7 @@
                         <form class="form-horizontal" method="post" action="/api/v1/addnode">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" name="node" placeholder="Node to Add (ip:port)"/>
+                                    <input class="form-control" type="text" name="node" required placeholder="Node to Add (ip:port)"/>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-primary">Add Node</button>
                                     </span>
@@ -283,7 +283,7 @@
                             </td>
                             <td>{{ $value.Connected }}</td>
                             <td>
-                                <form class="form-horizontal" method="post" action="/api/v1/removenode">
+                                <form class="form-horizontal" data-method="delete" method="post" action="/api/v1/removenode">
                                     <button type="submit" class="btn btn-xs btn-danger">Remove Node</button>
                                     <input type="hidden" name="node" value="{{ $value.AddedNode }}"/>
                                 </form>
@@ -301,5 +301,7 @@
 <footer>
 </footer>
 
+
+<script type="text/javascript" src="/assets/js/index.js"></script>
 </body>
 </html>

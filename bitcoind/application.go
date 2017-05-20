@@ -103,10 +103,10 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		log.Fatal(err)
 	}
 
-	uptime, err := method.Uptime(client)
-	if err != nil {
-		log.Fatal(err)
-	}
+	//uptime, err := method.Uptime(client)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
 	params := IndexTemplateParams{
 		Title:         "Bitcoin Daemon Status",
@@ -116,7 +116,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		Mempool:       mempool,
 		AddedNodeInfo: addednodeinfo,
 		NetTotals:     nettotals,
-		Uptime:        uptime,
+		Uptime:        0,
 	}
 
 	err = t.Execute(w, params)
@@ -125,9 +125,39 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 	}
 }
 
+type AddNodeHandler struct {
+	// Configuration contains the app configuration. In this context only the server list is used.
+	Configuration configuration.Configuration
+}
+
+func (i AddNodeHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
+	method.AddNode(client, req.PostFormValue("node"))
+
+	w.Header().Add("Content-Type", "application/json")
+	w.Write([]byte("true"))
+}
+
+type RemoveNodeHandler struct {
+	// Configuration contains the app configuration. In this context only the server list is used.
+	Configuration configuration.Configuration
+}
+
+func (i RemoveNodeHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	client := rpc.NewRPCClient(i.Configuration.Url, i.Configuration.Username, i.Configuration.Password)
+	method.RemoveNode(client, req.PostFormValue("node"))
+
+	w.Header().Add("Content-Type", "application/json")
+	w.Write([]byte("true"))
+}
+
 func Init(mux *http.ServeMux, configuration configuration.Configuration) {
 	indexHandler := IndexRequestHandler{Configuration: configuration}
+	addNodeHandler := AddNodeHandler{Configuration: configuration}
+	removeNodeHandler := RemoveNodeHandler{Configuration: configuration}
 
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	mux.Handle("/api/v1/addnode", addNodeHandler)
+	mux.Handle("/api/v1/removenode", removeNodeHandler)
 	mux.Handle("/", indexHandler)
 }
