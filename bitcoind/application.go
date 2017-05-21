@@ -64,6 +64,7 @@ func (i IndexRequestHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 		"serviceflagjoin": humanize2.ServiceFlagJoin,
 		"ping":            humanize2.Ping,
 		"uptime":          humanize2.Uptime,
+		"hostname":        humanize2.Hostname,
 	}
 
 	t, err := template.New("index.html").Funcs(funcs).ParseFiles("templates/index.html")

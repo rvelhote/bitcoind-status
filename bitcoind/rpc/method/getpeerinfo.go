@@ -26,8 +26,6 @@ import (
 	"github.com/gorilla/rpc/v2/json2"
 	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 	"github.com/rvelhote/timestamp-marshal"
-	"log"
-	"net"
 )
 
 type PeerInfoArgs struct {
@@ -126,23 +124,6 @@ type PeerInfoBytesReceived struct {
 	Pong    uint `json:"pong"`
 	VerAck  uint `json:"verack"`
 	Version uint `json:"version"`
-}
-
-// hostname fetches the hostname associated to the peer's ip address and sets it automatically (just call the func).
-func Hostname(ipaddress string) (string, error) {
-	host, _, _ := net.SplitHostPort(ipaddress)
-	names, err := net.LookupAddr(host)
-
-	if err != nil {
-		return "", err
-	}
-
-	if len(names) == 0 {
-		log.Println("Names not found for " + ipaddress)
-		return "", nil
-	}
-
-	return names[0], nil
 }
 
 func GetPeerInfo(client *rpc.RPCClient) ([]PeerInfo, error) {

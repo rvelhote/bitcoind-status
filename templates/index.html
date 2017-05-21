@@ -132,7 +132,12 @@
                         <tr>
                             <td>
                                 <div>{{ $value.Addr }}</div>
-                                <div>{{ $value.Subver }}</div>
+                                <div>
+                                    <span class="label label-default">{{ $value.Addr | hostname }}</span>
+                                </div>
+                                <div>
+                                    <span class="label label-default">{{ $value.Subver }}</span>
+                                </div>
 
                                 {{if $value.AddNode }}
                                     <div><span class="label label-default">MANUAL</span></div>
