@@ -1,4 +1,4 @@
-// Package method is a package
+// Package method contains an implemenetation of the RPC methods made available by the Bitcoin server
 package method
 
 /*
@@ -23,37 +23,38 @@ package method
  * SOFTWARE.
  */
 import (
-    "github.com/gorilla/rpc/v2/json2"
-    "github.com/rvelhote/bitcoind-status/bitcoind/rpc"
+	"github.com/gorilla/rpc/v2/json2"
+	"github.com/rvelhote/bitcoind-status/bitcoind/rpc"
 )
+
 type AddNodeArgs struct {
-    Node string `json:"node"`
-    Command string `json:"command"`
+	Node    string `json:"node"`
+	Command string `json:"command"`
 }
 
 func addNodeInternal(client *rpc.RPCClient, node string, command string) error {
-    response, err := client.Post("addnode", AddNodeArgs{node, command})
+	response, err := client.Post("addnode", AddNodeArgs{node, command})
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    defer response.Body.Close()
+	defer response.Body.Close()
 
-    var result interface{}
-    err = json2.DecodeClientResponse(response.Body, &result)
+	var result interface{}
+	err = json2.DecodeClientResponse(response.Body, &result)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func AddNode(client *rpc.RPCClient, node string) error {
-    return addNodeInternal(client, node, "add")
+	return addNodeInternal(client, node, "add")
 }
 
 func RemoveNode(client *rpc.RPCClient, node string) error {
-    return addNodeInternal(client, node, "remove")
+	return addNodeInternal(client, node, "remove")
 }

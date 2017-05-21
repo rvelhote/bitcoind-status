@@ -1,4 +1,4 @@
-// Package bitcoind is a package
+// Package method contains an implemenetation of the RPC methods made available by the Bitcoin server
 package method
 
 /*

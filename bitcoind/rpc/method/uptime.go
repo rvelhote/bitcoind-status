@@ -1,4 +1,4 @@
-// Package method is a package
+// Package method contains an implemenetation of the RPC methods made available by the Bitcoin server
 package method
 
 /*
@@ -28,6 +28,9 @@ import (
 	"time"
 )
 
+// Uptime consults the "uptime" RPC method to obtain how long (in seconds) has the Bitcoin server been running.
+// Note that this method is only available in rvelhote:rpc-uptime branch and hopefully it will be merged for the next
+// Bitcoin Core release.
 func Uptime(client *rpc.RPCClient) (time.Duration, error) {
 	response, err := client.Post("uptime", PeerInfoArgs{})
 
